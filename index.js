@@ -9,7 +9,7 @@ leftBtn.innerHTML = "&#10094;";
 let rightBtn = document.createElement("button");
 rightBtn.classList.add("rightBtn");
 rightBtn.innerHTML = "&#10095;";
-sliderContainer.append(leftBtn, imageContainer, rightBtn);
+sliderContainer.append( imageContainer,leftBtn, rightBtn);
 
 
 
@@ -20,34 +20,44 @@ let imageData = [
     "https://picsum.photos/id/20/500/300",
     "https://picsum.photos/id/200/500/300",
 ]
+let timeOut;
+let currentImg = 1;
 
-let currentImg = 0;
-imageData.map((element, index) => {
+imageData.map((element) => {
     let image = document.createElement("img");
     image.setAttribute("src", element);
     imageContainer.append(image);
-
-    leftBtn.addEventListener("click", () => {
-        if (currentImg > 0) {
-            currentImg--;
-            updateSlider();
-        }
-    })
-    rightBtn.addEventListener("click", () => {
-        if (currentImg < index) {
-            currentImg++;
-            updateSlider();
-
-        }
-    })
-
-
 })
-
+leftBtn.addEventListener("click", () => {
+    if (currentImg >1) {
+        currentImg--;
+        clearTimeout(timeOut);
+        updateSlider();
+    }
+})
+rightBtn.addEventListener("click", () => {
+    if (currentImg <imageData.length) {
+        currentImg++;
+        clearTimeout(timeOut);
+        updateSlider();
+    }
+})
 
 updateSlider();
 function updateSlider() {
+    if (currentImg>imageData.length) {
+        currentImg=1;
+        
+    } else if(currentImg<1) {
+        currentImg=imageData.length;
+        
+    }
     const width = imageContainer.children[0].clientWidth;
-    imageContainer.style.transform = `translateX(-${currentImg * width}px)`;
+    imageContainer.style.transform = `translateX(-${(currentImg -1)* width}px)`;
+    timeOut=setTimeout(()=>{
+        currentImg++;
+        updateSlider();
+    },3000)
 }
+ 
 
